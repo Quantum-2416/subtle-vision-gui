@@ -4,9 +4,24 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AI Traffic Control System - SIH 2025</title>
-    <meta name="description" content="AI-Powered Train Traffic Control System for maximizing railway section throughput using intelligent conflict resolution" />
+    <meta name="description" content="AI-Powered Train Traffic Control System for maximizing railway section throughput using intelligent conflict resolution
+To connect with your backend:
+
+Start your FastAPI server: uvicorn src.api:app --reload --host 0.0.0.0 --port 8000
+Click the "Connect" button in the dashboard
+All train controls will now interact with your real backend APIs
+The system automatically transforms data between your backend format and the GUI, handles real-time predictions, and provides seamless conflict resolution using your AI models.
+
+Perfect! Your GUI is now fully integrated with your FastAPI backend. Here's what I've implemented:
+
+🚀 Backend Integration Complete:
+
+API Service Layer - Connects to all your FastAPI endpoints (/demo, /predict, /schedule, /resolve)
+Real-time Data Hook - Fetches live train data and handles predictions/optimizations
+Smart Connection Management - Auto-detects backend availability and falls back to demo mode
+Live Controls - All buttons now execute real backend actions with loading states">
     <meta name="author" content="SIH 2025 Team" />
-    <meta name="keywords" content="railway, traffic control, AI, Smart India Hackathon, train management, conflict resolution" />
+    <meta name="keywords" content="railway, traffic control, AI, Smart India Hackathon, train management, conflict resolution">
 
     <meta property="og:title" content="AI Traffic Control System - SIH 2025" />
     <meta property="og:description" content="Revolutionary AI-powered railway traffic management system for Smart India Hackathon 2025" />
