@@ -2,39 +2,49 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Railway Traffic Control Design System - Professional Control Center Theme */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Railway Control Center Theme - Light Mode (for reference) */
+    --background: 210 20% 98%;
+    --foreground: 210 40% 8%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 8%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 8%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Railway Blue Primary */
+    --primary: 214 95% 36%;
+    --primary-foreground: 0 0% 98%;
+    --primary-glow: 214 95% 45%;
+    
+    /* Control Panel Secondary */
+    --secondary: 210 40% 92%;
+    --secondary-foreground: 210 40% 12%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 30% 85%;
+    --muted-foreground: 210 25% 45%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    /* Railway Teal Accent */
+    --accent: 186 100% 42%;
+    --accent-foreground: 0 0% 98%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    /* Status Colors */
+    --success: 142 71% 45%;
+    --success-foreground: 0 0% 98%;
+    
+    --warning: 43 96% 56%;
+    --warning-foreground: 210 40% 8%;
+    
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 214 20% 85%;
+    --input: 214 20% 88%;
+    --ring: 214 95% 36%;
 
     --radius: 0.5rem;
 
@@ -55,34 +65,74 @@ All colors MUST be HSL.
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+  /* Dark Theme - Primary Control Room Interface */
+  :root, .dark {
+    /* Control Room Dark Background */
+    --background: 214 35% 8%;
+    --foreground: 210 40% 95%;
 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
+    --card: 214 30% 10%;
+    --card-foreground: 210 40% 95%;
 
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 214 30% 12%;
+    --popover-foreground: 210 40% 95%;
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    /* Railway Blue Primary */
+    --primary: 214 95% 45%;
+    --primary-foreground: 214 35% 8%;
+    --primary-glow: 214 95% 55%;
+    
+    /* Control Panel Elements */
+    --secondary: 214 25% 15%;
+    --secondary-foreground: 210 40% 85%;
 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+    --muted: 214 20% 18%;
+    --muted-foreground: 210 15% 60%;
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    /* Railway Teal Accent */
+    --accent: 186 80% 50%;
+    --accent-foreground: 214 35% 8%;
 
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    /* Enhanced Status Colors for Dark Theme */
+    --success: 142 71% 55%;
+    --success-foreground: 214 35% 8%;
+    
+    --warning: 43 96% 60%;
+    --warning-foreground: 214 35% 8%;
+    
+    --destructive: 0 75% 60%;
+    --destructive-foreground: 210 40% 95%;
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
+    --border: 214 25% 20%;
+    --input: 214 25% 16%;
+    --ring: 214 95% 45%;
+    
+    /* Railway-specific design tokens */
+    --track-line: 210 15% 50%;
+    --track-occupied: 0 75% 60%;
+    --track-clear: 142 71% 55%;
+    --signal-red: 0 75% 60%;
+    --signal-yellow: 43 96% 60%;
+    --signal-green: 142 71% 55%;
+    
+    /* Gradients for depth and hierarchy */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
+    --gradient-surface: linear-gradient(180deg, hsl(var(--card)), hsl(214 30% 8%));
+    --gradient-glass: linear-gradient(135deg, 
+      hsl(var(--primary) / 0.1), 
+      hsl(var(--accent) / 0.05));
+    
+    /* Control room lighting effects */
+    --glow-primary: 0 0 20px hsl(var(--primary) / 0.3);
+    --glow-accent: 0 0 15px hsl(var(--accent) / 0.25);
+    --glow-success: 0 0 10px hsl(var(--success) / 0.3);
+    --glow-warning: 0 0 10px hsl(var(--warning) / 0.3);
+    --glow-destructive: 0 0 15px hsl(var(--destructive) / 0.4);
+    
+    /* Animation timing for control interfaces */
+    --transition-fast: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
@@ -100,6 +150,93 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  
+  /* Control room typography */
+  .font-mono {
+    font-feature-settings: "tnum" 1, "cv01" 1;
+  }
+}
+
+@layer components {
+  /* Railway status indicators */
+  .status-indicator {
+    @apply inline-flex h-2 w-2 rounded-full animate-pulse;
+  }
+  
+  .status-running {
+    @apply bg-success shadow-[var(--glow-success)];
+  }
+  
+  .status-delayed {
+    @apply bg-warning shadow-[var(--glow-warning)];
+  }
+  
+  .status-conflict {
+    @apply bg-destructive shadow-[var(--glow-destructive)];
+  }
+  
+  /* Control panel elements */
+  .control-panel {
+    @apply bg-gradient-to-br from-card to-card/80 border border-border/50 
+           backdrop-blur-sm rounded-lg shadow-lg;
+  }
+  
+  .glass-panel {
+    @apply bg-[var(--gradient-glass)] border border-border/30 
+           backdrop-blur-md rounded-lg;
+  }
+  
+  /* Railway track styles */
+  .track-line {
+    @apply stroke-[hsl(var(--track-line))] stroke-2;
+  }
+  
+  .track-occupied {
+    @apply stroke-[hsl(var(--track-occupied))] stroke-3;
+  }
+  
+  .track-clear {
+    @apply stroke-[hsl(var(--track-clear))] stroke-2;
+  }
+  
+  /* Animation classes for control interfaces */
+  .animate-glow {
+    animation: glow 2s ease-in-out infinite alternate;
+  }
+  
+  @keyframes glow {
+    from {
+      box-shadow: var(--glow-primary);
+    }
+    to {
+      box-shadow: var(--glow-primary), var(--glow-accent);
+    }
+  }
+  
+  .animate-slide-up {
+    animation: slideUp 0.3s ease-out;
+  }
+  
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Data visualization enhancements */
+  .chart-grid {
+    @apply stroke-muted stroke-1 opacity-30;
+  }
+  
+  .chart-axis {
+    @apply stroke-muted-foreground stroke-1;
   }
 }

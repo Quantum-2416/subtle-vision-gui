@@ -22,6 +22,7 @@ export default {
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
+          glow: "hsl(var(--primary-glow))",
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
@@ -38,6 +39,25 @@ export default {
         accent: {
           DEFAULT: "hsl(var(--accent))",
           foreground: "hsl(var(--accent-foreground))",
+        },
+        success: {
+          DEFAULT: "hsl(var(--success))",
+          foreground: "hsl(var(--success-foreground))",
+        },
+        warning: {
+          DEFAULT: "hsl(var(--warning))",
+          foreground: "hsl(var(--warning-foreground))",
+        },
+        // Railway-specific colors
+        track: {
+          line: "hsl(var(--track-line))",
+          occupied: "hsl(var(--track-occupied))",
+          clear: "hsl(var(--track-clear))",
+        },
+        signal: {
+          red: "hsl(var(--signal-red))",
+          yellow: "hsl(var(--signal-yellow))",
+          green: "hsl(var(--signal-green))",
         },
         popover: {
           DEFAULT: "hsl(var(--popover))",
@@ -84,6 +104,28 @@ export default {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "glow": "glow 2s ease-in-out infinite alternate",
+        "slide-up": "slideUp 0.3s ease-out",
+        "fade-in": "fadeIn 0.3s ease-out",
+        "pulse-glow": "pulseGlow 2s ease-in-out infinite",
+      },
+      boxShadow: {
+        'glow': 'var(--glow-primary)',
+        'glow-accent': 'var(--glow-accent)',
+        'glow-success': 'var(--glow-success)',
+        'glow-warning': 'var(--glow-warning)',
+        'glow-destructive': 'var(--glow-destructive)',
+      },
+      backgroundImage: {
+        'gradient-primary': 'var(--gradient-primary)',
+        'gradient-surface': 'var(--gradient-surface)',
+        'gradient-glass': 'var(--gradient-glass)',
+      },
+      transitionTimingFunction: {
+        'control': 'cubic-bezier(0.4, 0, 0.2, 1)',
+      },
+      fontFamily: {
+        'mono': ['JetBrains Mono', 'Consolas', 'Monaco', 'monospace'],
       },
     },
   },
