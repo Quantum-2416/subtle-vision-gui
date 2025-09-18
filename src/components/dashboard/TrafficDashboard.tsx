@@ -8,7 +8,9 @@ import { TrackLayout } from "./TrackLayout";
 import { ControlPanel } from "./ControlPanel";
 import { ConflictAlert } from "./ConflictAlert";
 import { TrainStatus } from "./TrainStatus";
-import { AlertTriangle, Zap, Activity, Clock } from "lucide-react";
+import { useRealTimeData } from "@/hooks/useRealTimeData";
+import { useToast } from "@/hooks/use-toast";
+import { AlertTriangle, Zap, Activity, Clock, Wifi, WifiOff, RefreshCw } from "lucide-react";
 
 interface Train {
   id: string;
@@ -71,9 +73,21 @@ const mockConflicts: Conflict[] = [
 ];
 
 export function TrafficDashboard() {
-  const [trains, setTrains] = useState<Train[]>(mockTrains);
-  const [conflicts, setConflicts] = useState<Conflict[]>(mockConflicts);
+  const {
+    trains,
+    conflicts,
+    isConnected,
+    lastUpdate,
+    loading,
+    error,
+    fetchLiveData,
+    optimizeSchedule,
+    resolveConflicts,
+    handleTrainAction,
+  } = useRealTimeData();
+  
   const [currentTime, setCurrentTime] = useState(new Date());
+  const { toast } = useToast();
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -81,6 +95,54 @@ export function TrafficDashboard() {
     }, 1000);
     return () => clearInterval(timer);
   }, []);
+
+  // Initial data load
+  useEffect(() => {
+    fetchLiveData();
+  }, [fetchLiveData]);
+
+  // Show notifications for errors
+  useEffect(() => {
+    if (error) {
+      toast({
+        title: "Connection Error",
+        description: error,
+        variant: "destructive",
+      });
+    }
+  }, [error, toast]);
+
+  const handleConnectBackend = async () => {
+    try {
+      await fetchLiveData(true); // Try live data
+      toast({
+        title: "Connected Successfully",
+        description: "Connected to backend and loaded live data",
+      });
+    } catch {
+      await fetchLiveData(false); // Fallback to demo data
+      toast({
+        title: "Demo Mode",
+        description: "Using demo data - backend not available",
+      });
+    }
+  };
+
+  const handleOptimize = async () => {
+    await optimizeSchedule();
+    toast({
+      title: "Schedule Optimized",
+      description: "Train schedule has been optimized for efficiency",
+    });
+  };
+
+  const handleResolveAll = async () => {
+    await resolveConflicts();
+    toast({
+      title: "Conflicts Resolved",
+      description: "AI has resolved all detected conflicts",
+    });
+  };
 
   const onTimeTrains = trains.filter(t => t.status === 'on-time').length;
   const delayedTrains = trains.filter(t => t.status === 'delayed').length;
@@ -113,7 +175,34 @@ export function TrafficDashboard() {
               <div className="text-sm text-muted-foreground">
                 {currentTime.toLocaleDateString()}
               </div>
+              <div className="text-xs text-muted-foreground">
+                Last Update: {lastUpdate.toLocaleTimeString()}
+              </div>
             </div>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => fetchLiveData()}
+                disabled={loading}
+              >
+                <RefreshCw className={`h-4 w-4 mr-1 ${loading ? 'animate-spin' : ''}`} />
+                Refresh
+              </Button>
+              <Button
+                variant={isConnected ? "secondary" : "outline"}
+                size="sm"
+                onClick={handleConnectBackend}
+                disabled={loading}
+              >
+                {isConnected ? <Wifi className="h-4 w-4 mr-1" /> : <WifiOff className="h-4 w-4 mr-1" />}
+                {isConnected ? 'Connected' : 'Connect'}
+              </Button>
+            </div>
+            <Badge variant={isConnected ? "default" : "secondary"} className="flex items-center gap-1">
+              <Activity className="h-3 w-3" />
+              {isConnected ? 'Live' : 'Demo'}
+            </Badge>
           </div>
         </div>
         
@@ -134,7 +223,7 @@ export function TrafficDashboard() {
               {trains.length}
             </div>
             <p className="text-xs text-muted-foreground mt-1">
-              Currently monitored
+              {isConnected ? 'Live data' : 'Demo data'}
             </p>
           </CardContent>
         </Card>
@@ -197,9 +286,19 @@ export function TrafficDashboard() {
           <ConflictAlert 
             conflicts={conflicts}
             onResolve={(conflictId) => {
-              setConflicts(conflicts.filter(c => c.id !== conflictId));
+              console.log(`Resolving conflict ${conflictId}`);
+              handleResolveAll();
             }}
           />
+          <div className="mt-4 flex justify-end">
+            <Button 
+              onClick={handleResolveAll}
+              disabled={loading}
+              variant="default"
+            >
+              {loading ? "Resolving..." : "Resolve All Conflicts"}
+            </Button>
+          </div>
         </div>
       )}
 
@@ -261,11 +360,14 @@ export function TrafficDashboard() {
             <ControlPanel 
               trains={trains}
               conflicts={conflicts}
-              onTrainUpdate={(trainId, updates) => {
-                setTrains(trains.map(t => 
-                  t.id === trainId ? { ...t, ...updates } : t
-                ));
+              onTrainUpdate={() => {
+                // Local update for immediate feedback
+                // Real backend sync happens through handleTrainAction
               }}
+              onTrainAction={handleTrainAction}
+              onOptimizeSchedule={handleOptimize}
+              isConnected={isConnected}
+              loading={loading}
             />
           </CardContent>
         </Card>

@@ -42,38 +42,55 @@ interface ControlPanelProps {
   trains: Train[];
   conflicts: Conflict[];
   onTrainUpdate: (trainId: string, updates: Partial<Train>) => void;
+  onTrainAction?: (trainId: string, action: string) => Promise<void>;
+  onOptimizeSchedule?: () => Promise<void>;
+  isConnected?: boolean;
+  loading?: boolean;
 }
 
-export function ControlPanel({ trains, conflicts, onTrainUpdate }: ControlPanelProps) {
+export function ControlPanel({ 
+  trains, 
+  conflicts, 
+  onTrainUpdate, 
+  onTrainAction,
+  onOptimizeSchedule,
+  isConnected = false,
+  loading = false
+}: ControlPanelProps) {
   const [selectedTrain, setSelectedTrain] = useState<string>("");
   const [simulationRunning, setSimulationRunning] = useState(true);
   const [aiAssistance, setAiAssistance] = useState(true);
   const [autoResolve, setAutoResolve] = useState(false);
 
-  const handleTrainAction = (action: string) => {
+  const handleTrainAction = async (action: string) => {
     if (!selectedTrain) return;
     
-    const train = trains.find(t => t.id === selectedTrain);
-    if (!train) return;
+    // Use backend action if available, otherwise fall back to local update
+    if (onTrainAction) {
+      await onTrainAction(selectedTrain, action);
+    } else {
+      const train = trains.find(t => t.id === selectedTrain);
+      if (!train) return;
 
-    switch (action) {
-      case 'hold':
-        onTrainUpdate(selectedTrain, {
-          status: 'delayed',
-          delay: train.delay + 5
-        });
-        break;
-      case 'expedite':
-        onTrainUpdate(selectedTrain, {
-          delay: Math.max(0, train.delay - 3)
-        });
-        break;
-      case 'reroute':
-        onTrainUpdate(selectedTrain, {
-          currentLocation: `${train.currentLocation} (Rerouted)`,
-          delay: train.delay + 2
-        });
-        break;
+      switch (action) {
+        case 'hold':
+          onTrainUpdate(selectedTrain, {
+            status: 'delayed',
+            delay: train.delay + 5
+          });
+          break;
+        case 'expedite':
+          onTrainUpdate(selectedTrain, {
+            delay: Math.max(0, train.delay - 3)
+          });
+          break;
+        case 'reroute':
+          onTrainUpdate(selectedTrain, {
+            currentLocation: `${train.currentLocation} (Rerouted)`,
+            delay: train.delay + 2
+          });
+          break;
+      }
     }
   };
 
@@ -221,9 +238,10 @@ export function ControlPanel({ trains, conflicts, onTrainUpdate }: ControlPanelP
                     variant="outline"
                     size="sm"
                     className="justify-start"
+                    disabled={loading}
                   >
                     <Clock className="h-3 w-3 mr-2" />
-                    Hold at Current Station (+5m)
+                    {loading ? "Processing..." : "Hold at Current Station (+5m)"}
                   </Button>
                   
                   <Button
@@ -231,9 +249,10 @@ export function ControlPanel({ trains, conflicts, onTrainUpdate }: ControlPanelP
                     variant="outline"
                     size="sm"
                     className="justify-start"
+                    disabled={loading}
                   >
                     <ArrowRight className="h-3 w-3 mr-2" />
-                    Expedite Journey (-3m)
+                    {loading ? "Processing..." : "Expedite Journey (-3m)"}
                   </Button>
                   
                   <Button
@@ -241,10 +260,24 @@ export function ControlPanel({ trains, conflicts, onTrainUpdate }: ControlPanelP
                     variant="outline"
                     size="sm"
                     className="justify-start"
+                    disabled={loading}
                   >
                     <RotateCcw className="h-3 w-3 mr-2" />
-                    Reroute via Loop Line (+2m)
+                    {loading ? "Processing..." : "Reroute via Loop Line (+2m)"}
                   </Button>
+
+                  {onOptimizeSchedule && (
+                    <Button
+                      onClick={onOptimizeSchedule}
+                      variant="default"
+                      size="sm"
+                      className="justify-start mt-2"
+                      disabled={loading}
+                    >
+                      <Zap className="h-3 w-3 mr-2" />
+                      {loading ? "Optimizing..." : "Optimize Schedule"}
+                    </Button>
+                  )}
                 </div>
               </div>
             </>
@@ -312,8 +345,8 @@ export function ControlPanel({ trains, conflicts, onTrainUpdate }: ControlPanelP
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <span className="text-sm text-muted-foreground">AI Engine</span>
-              <Badge variant={aiAssistance ? "default" : "secondary"}>
-                {aiAssistance ? "Active" : "Disabled"}
+              <Badge variant={isConnected ? "default" : "secondary"}>
+                {isConnected ? "Connected" : "Demo Mode"}
               </Badge>
             </div>
             
@@ -325,9 +358,9 @@ export function ControlPanel({ trains, conflicts, onTrainUpdate }: ControlPanelP
             </div>
             
             <div className="flex items-center justify-between">
-              <span className="text-sm text-muted-foreground">Network Status</span>
-              <Badge variant="default" className="bg-success/10 text-success border-success/20">
-                Online
+              <span className="text-sm text-muted-foreground">Backend Status</span>
+              <Badge variant={isConnected ? "default" : "destructive"}>
+                {isConnected ? "Connected" : "Disconnected"}
               </Badge>
             </div>
             
